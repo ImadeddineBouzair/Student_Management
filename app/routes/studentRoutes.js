@@ -6,6 +6,7 @@ const {
   addStudent,
   updateStudent,
   deleteStudent,
+  studentBirthYear,
 } = require('../controller/student');
 
 router.route('/').get(getStudents).post(addStudent);
@@ -14,5 +15,7 @@ router
   .get(getOneStudent)
   .patch(updateStudent)
   .delete(deleteStudent);
+
+router.route('/student-date/:year').get(studentBirthYear);
 
 module.exports = router;

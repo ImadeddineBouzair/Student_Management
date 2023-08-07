@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const moduleValidation = {
   type: Number,
@@ -14,6 +15,7 @@ const studentSchema = new mongoose.Schema(
       trim: true,
       required: true,
       unique: true,
+      minlength: 3,
     },
 
     birthDate: {
@@ -25,6 +27,12 @@ const studentSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      validate: {
+        validator: function (val) {
+          return validator.isEmail(val);
+        },
+        message: 'Not valid email',
+      },
     },
 
     academicYear: {
@@ -60,8 +68,15 @@ const studentSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
+
+studentSchema.virtual('age').get(function () {
+  const age = Math.floor((Date.now() - this.birthDate) / 31556952000);
+  return age;
+});
 
 const Student = new mongoose.model('Student', studentSchema);
 

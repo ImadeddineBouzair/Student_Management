@@ -137,3 +137,32 @@ exports.deleteStudent = async (req, res) => {
     res.status(400).send(err.message);
   }
 };
+
+exports.studentBirthYear = async (req, res) => {
+  try {
+    const year = +req.params.year;
+
+    const studentsDate = await Student.aggregate([
+      {
+        $match: {
+          birthDate: {
+            $gte: new Date(`${year}-01-01`),
+            $lte: new Date(`${year}-12-31`),
+          },
+        },
+      },
+
+      {
+        $sort: { birthDate: 1 },
+      },
+    ]);
+
+    res.status(200).json({
+      status: 'Success',
+      resultes: studentsDate.length,
+      data: studentsDate,
+    });
+  } catch (err) {
+    res.status(404).send(err.message);
+  }
+};
