@@ -2,7 +2,42 @@ const Student = require('../model/studentModel');
 
 exports.getStudents = async (req, res) => {
   try {
-    const students = await Student.find();
+    //--------------------- Filtering
+    let queryObject = { ...req.query };
+
+    const queryProperties = ['studentName', 'academicYear'];
+    const excludFields = ['page', 'sort', 'limit', 'fields'];
+
+    queryProperties.forEach((el) => {
+      if (queryObject[el])
+        queryObject[el] = queryObject[el].split('-').join(' ');
+    });
+
+    excludFields.forEach((el) => delete queryObject[el]);
+
+    let data = Student.find(queryObject);
+
+    //--------------------- Sorting
+    if (req.query.sort) {
+      data = data.sort(req.query.sort);
+    } else {
+      data = data.sort('-createdAt');
+    }
+
+    //--------------------- Limits
+    if (req.query.fields) {
+      const selectedFields = req.query.fields.split(',').join(' ');
+      data = data.select(selectedFields);
+    }
+
+    //--------------------- Pagination
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 20;
+    const skip = (page - 1) * limit;
+
+    data = data.limit(limit).skip(skip);
+
+    const students = await data;
 
     res.status(200).json({
       status: 'Success',
