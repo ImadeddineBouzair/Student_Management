@@ -27,7 +27,7 @@ Student management API, is an open source api, Helping the Administration regist
 
 ### Student Schema
 
-```
+```javascript
   {
    studentName: {
       type: String,
@@ -78,6 +78,42 @@ Student management API, is an open source api, Helping the Administration regist
       },
     },
   };
+```
+
+#### Output example :
+
+```JSON
+ "status": "Success",
+    "results": 1,
+    "data": [
+        {
+            "modulePoints": {
+                "modules": {
+                    "Math": 20,
+                    "physycs": 19,
+                    "science": 19.5,
+                    "historyAndGeography": 15,
+                    "law": 13.25,
+                    "arabic": 10,
+                    "french": 14.5,
+                    "english": 12.25,
+                    "sport": 14
+                },
+                "total": 13.45
+            },
+            "_id": "64d23cb8eebdecdeadc19c8f",
+            "studentName": "nadia lama",
+            "birthDate": "2001-03-21T00:00:00.000Z",
+            "email": "nadia@gemail.com",
+            "academicYear": "first year secondary",
+            "teachingRoomNumber": "A02",
+            "createdAt": "2023-08-08T13:01:44.094Z",
+            "updatedAt": "2023-08-08T13:01:44.094Z",
+            "__v": 0,
+            "age": 22,
+            "id": "64d23cb8eebdecdeadc19c8f"
+        },
+        ]
 ```
 
 > [!IMPORTANT]  
