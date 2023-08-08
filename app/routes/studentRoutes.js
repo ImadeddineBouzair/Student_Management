@@ -16,6 +16,6 @@ router
   .patch(updateStudent)
   .delete(deleteStudent);
 
-router.route('/student-date/:year').get(studentBirthYear);
+router.route('/birthYear/:year').get(studentBirthYear);
 
 module.exports = router;

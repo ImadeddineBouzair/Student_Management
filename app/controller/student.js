@@ -45,7 +45,7 @@ exports.getStudents = async (req, res) => {
       data: students,
     });
   } catch (err) {
-    res.status(404).send(err.message);
+    res.status(400).send(err.message);
   }
 };
 
@@ -54,14 +54,14 @@ exports.getOneStudent = async (req, res) => {
     const id = req.params.id;
 
     const student = await Student.findById(id);
-    if (!student) return res.status(400).send('No data found');
+    if (!student) return res.status(404).send('No data found');
 
     res.status(200).json({
       status: 'Success',
       data: student,
     });
   } catch (err) {
-    res.status(404).send(err.message);
+    res.status(400).send(err.message);
   }
 };
 
@@ -103,7 +103,7 @@ exports.addStudent = async (req, res) => {
       data: newStudent,
     });
   } catch (err) {
-    res.status(404).send(err.message);
+    res.status(400).send(err.message);
   }
 };
 
@@ -118,14 +118,14 @@ exports.updateStudent = async (req, res) => {
       }
     );
 
-    if (!updatedStudent) return res.status(400).send('Not found');
+    if (!updatedStudent) return res.status(404).send('Not found');
 
     res.status(200).json({
       status: 'Updated with success',
       data: updatedStudent,
     });
   } catch (err) {
-    res.status(404).send(err.message);
+    res.status(400).send(err.message);
   }
 };
 
@@ -133,7 +133,7 @@ exports.deleteStudent = async (req, res) => {
   try {
     const deletedStudent = await Student.findByIdAndDelete(req.params.id);
 
-    if (!deletedStudent) return res.status(400).send('Not found');
+    if (!deletedStudent) return res.status(404).send('Not found');
 
     res.status(204).json({
       status: 'Deleted with success',
@@ -169,6 +169,6 @@ exports.studentBirthYear = async (req, res) => {
       data: studentsDate,
     });
   } catch (err) {
-    res.status(404).send(err.message);
+    res.status(400).send(err.message);
   }
 };
