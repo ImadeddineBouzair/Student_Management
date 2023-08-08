@@ -54,7 +54,6 @@ exports.getOneStudent = async (req, res) => {
     const id = req.params.id;
 
     const student = await Student.findById(id);
-    console.log(student);
     if (!student) return res.status(400).send('No data found');
 
     res.status(200).json({
@@ -68,8 +67,14 @@ exports.getOneStudent = async (req, res) => {
 
 exports.addStudent = async (req, res) => {
   try {
-    const { studentName, birthDate, email, academicYear, teachingRoomNumber } =
-      req.body;
+    const {
+      studentName,
+      birthDate,
+      email,
+      academicYear,
+      teachingRoomNumber,
+      modulePoints,
+    } = req.body;
 
     if (
       !(studentName && birthDate && email && academicYear && teachingRoomNumber)
@@ -78,7 +83,7 @@ exports.addStudent = async (req, res) => {
     }
 
     const existingStudent = await Student.findOne({ email });
-    if (existingStudent) return res.status(400).send('Email already exist');
+    if (existingStudent) return res.status(400).send('Student already exist');
 
     const student = new Student({
       studentName: studentName
@@ -89,6 +94,7 @@ exports.addStudent = async (req, res) => {
       email,
       academicYear,
       teachingRoomNumber,
+      modulePoints,
     });
     const newStudent = await student.save();
 

@@ -55,15 +55,18 @@ const studentSchema = new mongoose.Schema(
     },
 
     modulePoints: {
-      Math: moduleValidation,
-      physycs: moduleValidation,
-      science: moduleValidation,
-      historyAndGeography: moduleValidation,
-      law: moduleValidation,
-      arabic: moduleValidation,
-      french: moduleValidation,
-      english: moduleValidation,
-      sport: moduleValidation,
+      total: Number,
+      modules: {
+        Math: moduleValidation,
+        physycs: moduleValidation,
+        science: moduleValidation,
+        historyAndGeography: moduleValidation,
+        law: moduleValidation,
+        arabic: moduleValidation,
+        french: moduleValidation,
+        english: moduleValidation,
+        sport: moduleValidation,
+      },
     },
   },
   {
@@ -74,8 +77,22 @@ const studentSchema = new mongoose.Schema(
 );
 
 studentSchema.virtual('age').get(function () {
-  const age = Math.floor((Date.now() - this.birthDate) / 31556952000);
+  const age = Math.floor((Date.now() - this.birthDate) / 31_556_952_000);
   return age;
+});
+
+studentSchema.pre('save', function (next) {
+  const points = Object.keys(this.modulePoints.modules).map(
+    (module) => this.modulePoints.modules[module]
+  );
+
+  const averag = +points
+    .reduce((accumulator, currentValue) => (accumulator + currentValue) / 2)
+    .toFixed(2);
+
+  this.modulePoints.total = averag;
+
+  next();
 });
 
 const Student = new mongoose.model('Student', studentSchema);
