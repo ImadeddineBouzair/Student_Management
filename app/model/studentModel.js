@@ -76,11 +76,13 @@ const studentSchema = new mongoose.Schema(
   }
 );
 
+// Calculating the age
 studentSchema.virtual('age').get(function () {
   const age = Math.floor((Date.now() - this.birthDate) / 31_556_952_000);
   return age;
 });
 
+//Ttotal calculation formula
 studentSchema.pre('save', function (next) {
   const points = Object.keys(this.modulePoints.modules).map(
     (module) => this.modulePoints.modules[module]
